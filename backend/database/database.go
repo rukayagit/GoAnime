@@ -16,7 +16,7 @@ func СonnectDB() {
 	if err != nil {
 		log.Fatal("Ошибка загрузки .env файла")
 	}
-	dsn := fmt.Sprintf("host=%s user+%s password=%s dbname=%s sslmode=disable",
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
 		os.Getenv("DB_HOST"),
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
@@ -26,7 +26,7 @@ func СonnectDB() {
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatal("Ошибка подключения к базе данных", err)
+		log.Fatal("Ошибка подключения к базе данных: ", err)
 	}
 
 	fmt.Println("✅ База данных успешно подключена!")

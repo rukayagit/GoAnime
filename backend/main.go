@@ -9,7 +9,7 @@ import (
 
 func main() {
 	// Подключение к базе данных
-	database.ConnectDB()
+	database.СonnectDB()
 
 	// Создание сервера
 	r := gin.Default()
