@@ -26,9 +26,9 @@ func СonnectDB() {
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatal("Ошибка подключения к БД", err)
+		log.Fatal("Ошибка подключения к базе данных", err)
 	}
 
-	fmt.Println("Соединение с БД установлено")
+	fmt.Println("✅ База данных успешно подключена!")
 	DB = db
 }
