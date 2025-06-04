@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+
+#mainAniGrid{
+    grid-template-areas:
+        "a b b c c"
+        "a b b c c"
+        "g z z c c";
+    grid-template-rows: 221.5px 221.5px 1fr;
+}
+
+#aniBigPoster{grid-area: a;}
+#aniAbout{grid-area: b;}
+#threeColsGrid{grid-area: c;}
+#aniDesc{grid-area: z;}
+#aniButtons{grid-area: g;}
+
+#threeColsGrid{
+    grid-template-areas:
+    "d e f"
+}
+#mt{grid-area: d;}
+#aniRating{grid-area: e;}
+#aniMedia{grid-area: f;}
