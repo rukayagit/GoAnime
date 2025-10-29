@@ -13,7 +13,6 @@ func main() {
 	// Подключение к базе данных с обработкой ошибки
 	err := database.ConnectDB()
 	if err != nil {
-		// Выводим ошибку в лог и завершаем выполнение программы
 		fmt.Println("Ошибка при подключении к базе данных:", err)
 		return
 	}
@@ -21,29 +20,38 @@ func main() {
 	// Создание сервера
 	r := gin.Default()
 
-	// Настройка CORS, чтобы фронтенд мог делать запросы
+	// Настройка CORS
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"*"}, // Разрешаем доступ с любого источника
+		AllowOrigins:     []string{"*"}, // Для продакшена лучше указать конкретный фронт
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		AllowCredentials: true,
 	}))
 
+	// Корневой маршрут для проверки работы API
+	r.GET("/", func(c *gin.Context) {
+		c.JSON(200, gin.H{"message": "API работает!"})
+	})
+
 	// Подключение маршрутов
 	routes.RegisterAnimeRoutes(r)
 
+	// Получаем порт из Render (или используем 8080 локально)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	fmt.Println("Сервер запущен на http://localhost:" + port)
+
 	// Запуск сервера
-	port := ":8080"
-	fmt.Println("Сервер запущен на http://localhost" + port)
-	if err := r.Run(port); err != nil {
-		// Если сервер не запускается, выводим ошибку
+	if err := r.Run(":" + port); err != nil {
 		fmt.Println("Ошибка запуска сервера:", err)
 		return
 	}
 
-	// Логирование для отладки
+	// Логирование MAL_CLIENT_ID для отладки
 	if malClientID := os.Getenv("MAL_CLIENT_ID"); malClientID != "" {
-		fmt.Println("MAL_CLIENT_ID:", malClientID)
+		fmt.Println("MAL_CLIENT_ID задан")
 	} else {
 		fmt.Println("MAL_CLIENT_ID не задан.")
 	}
