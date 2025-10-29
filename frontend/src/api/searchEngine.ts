@@ -1,7 +1,11 @@
-import { AnimeData } from "./getAnimeData.ts"; // если в другом файле
-const SEARCH_API_URL = "http://localhost:8080/api/anime/search";
+import { AnimeData } from "./getAnimeData";
 
-export async function searchProcessor(query: string, signal?: AbortSignal): Promise<AnimeData[]> {
+const SEARCH_API_URL = import.meta.env.VITE_API_URL + "/anime/search";
+
+export async function searchProcessor(
+    query: string,
+    signal?: AbortSignal
+): Promise<AnimeData[]> {
     if (!query.trim()) return [];
 
     const url = `${SEARCH_API_URL}?q=${encodeURIComponent(query.trim())}`;
