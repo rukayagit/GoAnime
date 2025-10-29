@@ -21,12 +21,14 @@ func main() {
 	r := gin.Default()
 
 	// Настройка CORS
+	
 	r.Use(cors.New(cors.Config{
-    AllowOrigins:     []string{"https://goanime-virid.vercel.app"}, // фронтенд Vercel
-    AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
-    AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
-    AllowCredentials: true,
-}))
+	    AllowOrigins:     []string{"https://goanime-virid.vercel.app"}, // фронтенд Vercel
+	    AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+	    AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+	    AllowCredentials: true,
+	    MaxAge:           12 * time.Hour,
+	}))
 
 	// Корневой маршрут для проверки работы API
 	r.GET("/", func(c *gin.Context) {
