@@ -11,9 +11,12 @@ interface FetchAnimeOptions {
     limit?: number;  // по умолчанию 6
 }
 
-const API_URL = "http://localhost:8080/api/anime";
+const API_URL = import.meta.env.VITE_API_URL + "/anime";
 
-export async function fetchAnimeData(options: FetchAnimeOptions = {}, signal?: AbortSignal): Promise<AnimeData[]> {
+export async function fetchAnimeData(
+    options: FetchAnimeOptions = {},
+    signal?: AbortSignal
+): Promise<AnimeData[]> {
     const { status, order = "ranked", limit = 6 } = options;
 
     const params = new URLSearchParams({
@@ -36,7 +39,6 @@ export async function fetchAnimeData(options: FetchAnimeOptions = {}, signal?: A
 
         const data = await response.json();
 
-        // Проверяем, есть ли данные
         if (!data || !data.data) {
             console.warn("Нет данных в ответе:", data);
             return [];
