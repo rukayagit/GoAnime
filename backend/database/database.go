@@ -12,25 +12,29 @@ import (
 var DB *gorm.DB
 
 func ConnectDB() error {
-	err := godotenv.Load()
-	if err != nil {
-		return fmt.Errorf("Ошибка загрузки .env файла: %w", err)
-	}
+	// Загружаем .env (для локальной разработки)
+	_ = godotenv.Load()
 
-	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_NAME"),
-		os.Getenv("DB_PORT"),
-	)
+	// Используем DATABASE_URL из переменных окружения Render
+	dsn := os.Getenv("DATABASE_URL")
+	if dsn == "" {
+		// Если DATABASE_URL не задана, собираем DSN из отдельных переменных (для локалки)
+		dsn = fmt.Sprintf(
+			"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
+			os.Getenv("DB_HOST"),
+			os.Getenv("DB_USER"),
+			os.Getenv("DB_PASSWORD"),
+			os.Getenv("DB_NAME"),
+			os.Getenv("DB_PORT"),
+		)
+	}
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return fmt.Errorf("Ошибка подключения к базе данных: %w", err)
 	}
 
+	// Миграция модели
 	err = db.AutoMigrate(&models.FavouriteAnime{})
 	if err != nil {
 		return fmt.Errorf("Ошибка миграции: %w", err)
